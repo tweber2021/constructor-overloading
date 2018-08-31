@@ -7,15 +7,18 @@ public class TimeOfDay {
             this.mhr=mhr;
             this.mmin=0;
         }
-        else{System.err.println("Invalid minute.");}
+        else{throw new IllegalArgumentException("Invalid hour: "+mhr);}
     }
 
     public TimeOfDay(int mhr, int mmin) {
-        if(chkLegality(mhr,mmin)==true){
-            this.mhr = mhr;
-            this.mmin = mmin;
+        if(chkLegality(mhr,0)==true){
+            setMhr(mhr);
         }
-        else{System.err.println("Invalid time.");}
+        else{throw new IllegalArgumentException("Invalid hour: "+mhr);}
+        if(chkLegality(0,mmin)==true){
+            setMmin(mmin);
+        }
+        else{throw new IllegalArgumentException("Invalid minute: "+mmin);}
     }
 
     public TimeOfDay() {
@@ -28,6 +31,14 @@ public class TimeOfDay {
 
     public int getMmin() {
         return mmin;
+    }
+
+    public void setMhr(int mhr) {
+        this.mhr = mhr;
+    }
+
+    public void setMmin(int mmin) {
+        this.mmin = mmin;
     }
 
     public static boolean chkLegality(int hr, int min){
