@@ -5,7 +5,7 @@ public class TimeDifference {
         Scanner sc = new Scanner(System.in);
         boolean inputA=false;
         while (!inputA) {
-            //TODO
+            getTime();
         }
     }
 
