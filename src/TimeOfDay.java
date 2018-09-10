@@ -27,8 +27,12 @@ public class TimeOfDay {
 
     public TimeOfDay(int myr, int mmo, int mday, int mhr, int mmin, int msec) {
         if(chkLegalityEx(myr,mmo,mday,mhr,mmin,msec)==true){
-            set
+            setMmin(mmin);
             setMhr(mhr);
+            setMsec(msec);
+            setMday(mday);
+            setMmo(mmo);
+            setMyr(myr);
         }
         else{throw new IllegalArgumentException("Invalid Time: "+mmo+"."+mday+"."+myr+" "+mhr+":"+mmin+":"+msec);}
     }
@@ -43,6 +47,22 @@ public class TimeOfDay {
 
     public int getMmin() {
         return mmin;
+    }
+
+    public int getMsec() {
+        return msec;
+    }
+
+    public int getMday() {
+        return mday;
+    }
+
+    public int getMmo() {
+        return mmo;
+    }
+
+    public int getMyr() {
+        return myr;
     }
 
     public void setMhr(int mhr) {
@@ -76,7 +96,7 @@ public class TimeOfDay {
     }
 
     public static boolean chkLegalityEx(int yr, int mo, int day, int hr, int min, int sec){
-        if(yr<1970||yr>2037){return false;}
+        // if(yr<1970||yr>2037){return false;}
         if(mo<0||mo>12){return false;}
         if(day<0||day>31){return false;}
         if(hr<0||hr>23){return false;}
