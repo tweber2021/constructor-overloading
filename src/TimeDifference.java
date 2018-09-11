@@ -35,7 +35,7 @@ public class TimeDifference {
             int tyr = in("year",sc);
             int tmo = in("month",sc);
             int tday = in("day",sc);
-            int thr = in("hour",sc);
+            int thr = in("hour (military)",sc);
             int tmin = in("minute",sc);
             int tsec = in("second",sc);
             if(TimeOfDay.chkLegalityEx(tyr,tmo,tday,thr,tmin,tsec)){
@@ -48,7 +48,7 @@ public class TimeDifference {
     }
 
     static long timeDiff(TimeOfDay A, TimeOfDay B){
-        long result=0;
+        long result;
         LocalDateTime DateA = LocalDateTime.of(A.getMyr(),A.getMmo(),A.getMday(),A.getMhr(),A.getMmin(),A.getMsec());
         long Am = DateA.toEpochSecond(ZoneOffset.UTC);
         LocalDateTime DateB = LocalDateTime.of(B.getMyr(),B.getMmo(),B.getMday(),B.getMhr(),B.getMmin(),B.getMsec());
@@ -57,9 +57,29 @@ public class TimeDifference {
         return result;
     }
 
+    /*
+    static TimeOfDay msConvert0(long timestamp){
+        LocalDateTime D = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
+        TimeOfDay result = new TimeOfDay((D.getYear()-1969),D.getMonthValue()-12,D.getDayOfMonth()-31,D.getHour()-19,D.getMinute(),D.getSecond());
+        return result;
+    }
+    */
+
     static TimeOfDay msConvert(long timestamp){
-        Date D = new Date(timestamp);
-        TimeOfDay result = new TimeOfDay((D.getYear()),D.getMonth(),D.getDay(),D.getHours(),D.getMinutes(),D.getSeconds());
+        long remainder=timestamp; // for classification purposes
+
+        int yr=(int)(Math.floor((double)(remainder/31536000)));
+        remainder = remainder % 31536000;
+        int mo=(int)(Math.floor((double)(remainder/2592000)));
+        remainder = remainder % 2592000;
+        int day=(int)(Math.floor((double)(remainder/86400)));
+        remainder = remainder % 86400;
+        int hr=(int)(Math.floor((double)(remainder/3600)));
+        remainder = remainder % 3600;
+        int min=(int)(Math.floor((double)(remainder/60)));
+        remainder = remainder % 60;
+        TimeOfDay result = new TimeOfDay(yr,mo,day,hr,min,(int)(remainder));
+
         return result;
     }
 }
