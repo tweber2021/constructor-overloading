@@ -6,27 +6,8 @@ public class TimeOfDay {
     private int mmo;
     private int myr;
 
-    public TimeOfDay(int mhr) {
-        if(chkLegality(mhr,0)==true){
-            this.mhr=mhr;
-            this.mmin=0;
-        }
-        else{throw new IllegalArgumentException("Invalid hour: "+mhr);}
-    }
-
-    public TimeOfDay(int mhr, int mmin) {
-        if(chkLegality(mhr,0)==true){
-            setMhr(mhr);
-        }
-        else{throw new IllegalArgumentException("Invalid hour: "+mhr);}
-        if(chkLegality(0,mmin)==true){
-            setMmin(mmin);
-        }
-        else{throw new IllegalArgumentException("Invalid minute: "+mmin);}
-    }
-
     public TimeOfDay(int myr, int mmo, int mday, int mhr, int mmin, int msec) {
-        if(chkLegalityEx(myr,mmo,mday,mhr,mmin,msec)==true){
+        if(chkLegality(myr,mmo,mday,mhr,mmin,msec)==true){
             setMmin(mmin);
             setMhr(mhr);
             setMsec(msec);
@@ -37,8 +18,22 @@ public class TimeOfDay {
         else{throw new IllegalArgumentException("Invalid Time: "+mmo+"."+mday+"."+myr+" "+mhr+":"+mmin+":"+msec);}
     }
 
-    public TimeOfDay() {
-        this(0,0); // already legal
+    public TimeOfDay(int myr, int mmo, int mday) {
+        if(chkLegality(myr,mmo,mday)==true){
+            setMday(mday);
+            setMmo(mmo);
+            setMyr(myr);
+        }
+        else{throw new IllegalArgumentException("Invalid Time: "+mmo+"."+mday+"."+myr);}
+    }
+
+    public TimeOfDay(int mhr, int mmin) {
+        if(chkLegality(mhr,mmin)==true){
+            setMday(mday);
+            setMmo(mmo);
+            setMyr(myr);
+        }
+        else{throw new IllegalArgumentException("Invalid Time: "+mmo+"."+mday+"."+myr);}
     }
 
     public int getMhr() {
@@ -89,19 +84,63 @@ public class TimeOfDay {
         this.msec = msec;
     }
 
-    public static boolean chkLegality(int hr, int min){
-        if(hr<0||hr>23){return false;}
-        if(min<0||min>59){return false;}
-        return true;
+    public static boolean[] chkLegalityEx(int yr, int mo, int day, int hr, int min, int sec){
+        boolean legal[] = new boolean[5];
+        if(mo<0||mo>12){legal[0]=true;}
+        if(day<0||day>31){legal[1]=true;}
+        if(hr<0||hr>23){legal[2]=true;}
+        if(min<0||min>59){legal[3]=true;}
+        if(sec<0||sec>59){legal[4]=true;}
+        return legal;
     }
 
-    public static boolean chkLegalityEx(int yr, int mo, int day, int hr, int min, int sec){
-        // if(yr<1970||yr>2037){return false;}
-        if(mo<0||mo>12){return false;}
-        if(day<0||day>31){return false;}
-        if(hr<0||hr>23){return false;}
-        if(min<0||min>59){return false;}
-        if(sec<0||sec>59){return false;}
-        return true;
+    public static boolean[] chkLegalityEx(int yr, int mo, int day){
+        boolean legal[] = new boolean[5];
+        if(mo<0||mo>12){legal[0]=true;}
+        if(day<0||day>31){legal[1]=true;}
+        return legal;
+    }
+
+    public static boolean chkLegality(int yr, int mo, int day, int hr, int min, int sec){
+        boolean chk[] = chkLegalityEx(yr,mo,day,hr,min,sec);
+        boolean legality = true;
+        for(int i=0;i<5;i++){
+            if(chk[i]){
+                legality=false;
+            }
+        }
+        return legality;
+    }
+
+    public static boolean chkLegality(int yr, int mo, int day){
+        boolean chk[] = chkLegalityEx(yr,mo,day);
+        boolean legality = true;
+        for(int i=0;i<5;i++){
+            if(chk[i]){
+                legality=false;
+            }
+        }
+        return legality;
+    }
+
+    public static boolean chkLegality(int hr, int min){
+        boolean chk[] = chkLegalityEx(2000,1,1,hr,min,0);
+        boolean legality = true;
+        for(int i=0;i<5;i++){
+            if(chk[i]){
+                legality=false;
+            }
+        }
+        return legality;
+    }
+
+    public static String invalidParamString(boolean[] legality){
+        String inv = "";
+        if(legality[0]){inv=inv+"month ";}
+        if(legality[1]){inv=inv+"day ";}
+        if(legality[2]){inv=inv+"hour ";}
+        if(legality[3]){inv=inv+"minute ";}
+        if(legality[4]){inv=inv+"second ";}
+        return inv;
     }
 }
