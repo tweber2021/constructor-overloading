@@ -1,2 +1,8 @@
 # constructor-overloading
-Stuff that deals with constructor and method overloading.
+Projects that utilize constructor or method overloading.
+
+**Includes:**
+
+* *TimeOfDay* class
+* *TimeOfDay* demo
+* Time difference demo
